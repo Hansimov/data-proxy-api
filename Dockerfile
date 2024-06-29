@@ -5,4 +5,4 @@ RUN mkdir /.cache && chmod 777 /.cache
 RUN pip install -r requirements.txt
 COPY . $HOME/app
 EXPOSE 22001
-CMD ["python", "-m", "apps.data_proxy_app"]
+CMD ["python", "-m", "apis.data_proxy_api"]
