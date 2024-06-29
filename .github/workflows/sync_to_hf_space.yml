@@ -1,0 +1,23 @@
+name: Sync to Hugging Face hub
+on:
+  push:
+    paths:
+      - "configs/config.json"
+      - "Dockerfile"
+      - ".github/workflows/sync_to_hf_space.yml"
+      - "requirements.txt"
+  workflow_dispatch:
+
+jobs:
+  sync-to-hub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+          ref: main
+      - name: Push to hub
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: git push -f https://Hansimov:$HF_TOKEN@huggingface.co/spaces/Hansimov/data-proxy-api main:main
