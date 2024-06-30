@@ -9,7 +9,7 @@ from tclogger import logger
 from typing import Optional
 
 from apis.arg_parser import ArgParser
-from configs.envs import DATA_PROXY_APP_ENVS, CACHE_ROOT
+from configs.envs import DATA_PROXY_API_ENVS, CACHE_ROOT
 
 
 class DataProxyAPI:
@@ -78,7 +78,7 @@ class DataProxyAPI:
 
 
 if __name__ == "__main__":
-    app_envs = DATA_PROXY_APP_ENVS
+    app_envs = DATA_PROXY_API_ENVS
     app = DataProxyAPI(app_envs).app
     app_args = ArgParser(app_envs).args
     if app_args.reload:

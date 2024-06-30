@@ -2,7 +2,7 @@ name: Sync to Hugging Face hub
 on:
   push:
     paths:
-      - "configs/config.json"
+      - "configs/envs.json"
       - "Dockerfile"
       - ".github/workflows/sync_to_hf_space.yml"
       - "requirements.txt"

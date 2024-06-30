@@ -1,6 +1,6 @@
 {
-    "data_proxy_app": {
-        "app_name": "Data Proxy App",
+    "data_proxy_api": {
+        "app_name": "Data Proxy API",
         "host": "0.0.0.0",
         "port": 22001,
         "version": "0.1.1"
