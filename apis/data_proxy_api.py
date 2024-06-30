@@ -9,7 +9,7 @@ from tclogger import logger
 from typing import Optional
 
 from apis.arg_parser import ArgParser
-from configs.envs import DATA_PROXY_APP_ENVS
+from configs.envs import DATA_PROXY_APP_ENVS, CACHE_ROOT
 
 
 class DataProxyAPI:
@@ -39,10 +39,36 @@ class DataProxyAPI:
             allow_headers=["*"],
         )
 
+    def get_img_path_by_url(self, url: str):
+        return CACHE_ROOT / url.split("/")[-1]
+
+    def save_img(self, img_url: str, img_bytes: bytes):
+        img_path = self.get_img_path_by_url(img_url)
+        if not img_path.parent.exists():
+            img_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(img_path, "wb") as img_file:
+            img_file.write(img_bytes)
+        return img_path
+
+    def get_img_bytes_from_url(self, url: str):
+        try:
+            response = requests.get(url, headers=self.REQUESTS_HEADERS)
+            img_bytes = response.content
+        except Exception as e:
+            img_bytes = None
+
+        return img_bytes
+
     def get_img(self, url: str):
-        response = requests.get(url, headers=self.REQUESTS_HEADERS)
-        image_bytes = response.content
-        return Response(content=image_bytes, media_type="image/jpeg")
+        img_path = self.get_img_path_by_url(url)
+        if img_path.exists():
+            with open(img_path, "rb") as img_file:
+                img_bytes = img_file.read()
+        else:
+            img_bytes = self.get_img_bytes_from_url(url)
+            self.save_img(url, img_bytes)
+
+        return Response(content=img_bytes, media_type="image/jpeg")
 
     def setup_routes(self):
         self.app.get(
